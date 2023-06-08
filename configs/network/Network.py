@@ -119,6 +119,29 @@ def define_options(parser):
             channel for each virtual network""",
     )
 
+    #nghiant: custom placement supporting Mesh_nghiant_custom.py and Mesh_nghiant_custom_v2
+    parser.add_argument("--placement-file", type=str, default=None,
+                        help="placement file with placement specified")
+    
+    #nghiant: custom trace file supporting trace-based traffic generator
+    parser.add_argument("--trace", type=str, default=None,
+                        help="trace file for trace-based traffic generator sim")
+
+    parser.add_argument("--sim-cycles", type=int, default=-1,
+                        help="Number of simulation cycles")
+
+    parser.add_argument("--num-packets-max", type=int, default=-1,
+                        help="Stop injecting after --num-packets-max.\
+                            Set to -1 to disable.")
+
+    parser.add_argument("--inj-vnet", type=int, default=-1,
+                        choices=[-1,0,1,2],
+                        help="Only inject in this vnet (0, 1 or 2).\
+                            0 and 1 are 1-flit, 2 is 5-flit.\
+                            Set to -1 to inject randomly in all vnets.")
+
+    parser.add_argument("--num-fake-cpus", type=int, default=0,
+                        help="Fake cpus for L2Cache and Dir and others")
 
 def create_network(options, ruby):
 

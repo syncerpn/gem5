@@ -85,6 +85,20 @@ flitBuffer::setMaxSize(int maximum)
     max_size = maximum;
 }
 
+//nghiant: functionalRead now implemented
+//https://www.mail-archive.com/gem5-users@gem5.org/msg19624.html
+bool
+flitBuffer::functionalRead(Packet *pkt)
+{
+    for (unsigned int i = 0; i < m_buffer.size(); ++i) {
+        if (m_buffer[i]->functionalRead(pkt)) {
+            return true;
+        }
+    }
+    return false;
+}
+//nghiant_end
+
 bool
 flitBuffer::functionalRead(Packet *pkt, WriteMask &mask)
 {

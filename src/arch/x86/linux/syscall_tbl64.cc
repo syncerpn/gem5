@@ -68,9 +68,9 @@ SyscallDescTable<EmuLinux::SyscallABI64> EmuLinux::syscallDescs64 = {
     {  26, "msync" },
     {  27, "mincore" },
     {  28, "madvise", ignoreFunc },
-    {  29, "shmget" },
-    {  30, "shmat" },
-    {  31, "shmctl" },
+    {  29, "shmget", ignoreFunc }, //nghiant: default, no ignoreFunc
+    {  30, "shmat", ignoreFunc }, //nghiant: default, no ignoreFunc
+    {  31, "shmctl", ignoreFunc }, //nghiant: default, no ignoreFunc
     {  32, "dup", dupFunc },
     {  33, "dup2", dup2Func },
     {  34, "pause" },
@@ -155,7 +155,7 @@ SyscallDescTable<EmuLinux::SyscallABI64> EmuLinux::syscallDescs64 = {
     { 109, "setpgid", setpgidFunc },
     { 110, "getppid", getppidFunc },
     { 111, "getpgrp", getpgrpFunc },
-    { 112, "setsid" },
+    { 112, "setsid", ignoreFunc }, //nghiant: default, no ignoreFunc
     { 113, "setreuid" },
     { 114, "setregid" },
     { 115, "getgroups" },

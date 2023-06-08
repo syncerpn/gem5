@@ -117,7 +117,7 @@ def addNoISAOptions(parser):
         "--sys-clock",
         action="store",
         type=str,
-        default="1GHz",
+        default="2GHz",
         help="""Top-level clock for blocks running at system
                       speed""",
     )

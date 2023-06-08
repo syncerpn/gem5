@@ -1,6 +1,6 @@
 # -*- mode:python -*-
 
-# Copyright (c) 2009 The Hewlett-Packard Development Company
+# Copyright (c) 2016 Georgia Institute of Technology.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -26,29 +26,13 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import os
-
 Import('*')
 
-main.Append(ALL_PROTOCOLS=[
-    'GPU_VIPER',
-    'MOESI_AMD_Base',
-    'MESI_Two_Level',
-    'MESI_Three_Level',
-    'MESI_Three_Level_HTM',
-    'MI_example',
-    'MOESI_CMP_directory',
-    'MOESI_CMP_token',
-    'MOESI_hammer',
-    'Garnet_standalone',
-    'Garnet_trace', #nghiant_230523: add custom Garnet_trace
-    'None'
-    ])
+if env['CONF']['PROTOCOL'] == 'None':
+    Return()
 
-opt = BoolVariable('SLICC_HTML', 'Create HTML files', False)
-sticky_vars.Add(opt)
+SimObject('GarnetTraceTraffic.py', sim_objects=['GarnetTraceTraffic'])
 
-main.Append(PROTOCOL_DIRS=[Dir('.')])
+Source('GarnetTraceTraffic.cc')
 
-protocol_base = Dir('.')
-Export('protocol_base')
+DebugFlag('GarnetTraceTraffic')

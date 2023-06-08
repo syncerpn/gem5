@@ -80,6 +80,10 @@ class flitBuffer
         m_buffer.push_back(flt);
     }
 
+    //nghiant: functionalRead now implemented
+    //https://www.mail-archive.com/gem5-users@gem5.org/msg19624.html
+    bool functionalRead(Packet *pkt);
+    //nghiant_end
     bool functionalRead(Packet *pkt, WriteMask &mask);
     uint32_t functionalWrite(Packet *pkt);
 

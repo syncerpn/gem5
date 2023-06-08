@@ -152,6 +152,10 @@ class InputUnit : public Consumer
     double get_buf_write_activity(unsigned int vnet) const
     { return m_num_buffer_writes[vnet]; }
 
+    //nghiant: functionalRead now implemented
+    //https://www.mail-archive.com/gem5-users@gem5.org/msg19624.html
+    bool functionalRead(Packet *pkt);
+    //nghiant_end
     bool functionalRead(Packet *pkt, WriteMask &mask);
     uint32_t functionalWrite(Packet *pkt);
 

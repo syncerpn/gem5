@@ -105,7 +105,10 @@ class GarnetNetwork : public Network
                           std::vector<NetDest>& routing_table_entry,
                           PortDirection src_outport_dirn,
                           PortDirection dest_inport_dirn);
-
+    //nghiant: functionalRead now implemented
+    //https://www.mail-archive.com/gem5-users@gem5.org/msg19624.html
+    bool functionalRead(Packet *pkt);
+    //nghiant_end
     bool functionalRead(Packet *pkt, WriteMask &mask);
     //! Function for performing a functional write. The return value
     //! indicates the number of messages that were written.

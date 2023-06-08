@@ -37,6 +37,7 @@
 
 #include "base/cast.hh"
 #include "debug/RubyNetwork.hh"
+#include "debug/nghiant_RubyNetwork.hh" //nghiant
 #include "mem/ruby/network/MessageBuffer.hh"
 #include "mem/ruby/network/garnet/Credit.hh"
 #include "mem/ruby/network/garnet/flitBuffer.hh"
@@ -595,6 +596,7 @@ NetworkInterface::scheduleFlit(flit *t_flit)
         DPRINTF(RubyNetwork, "Scheduling at %s time:%ld flit:%s Message:%s\n",
         oPort->outNetLink()->name(), clockEdge(Cycles(1)),
         *t_flit, *(t_flit->get_msg_ptr()));
+        DPRINTF(nghiant_RubyNetwork, "%s\n", *t_flit); //nghiant: garnet trace debug
         oPort->outFlitQueue()->insert(t_flit);
         oPort->outNetLink()->scheduleEventAbsolute(clockEdge(Cycles(1)));
         return;
@@ -667,6 +669,27 @@ NetworkInterface::print(std::ostream& out) const
 {
     out << "[Network Interface]";
 }
+
+//nghiant: functionalRead now implemented
+//nghiant: !important, need to check whether it should be inFlitQueue()
+//https://www.mail-archive.com/gem5-users@gem5.org/msg19624.html
+bool
+NetworkInterface::functionalRead(Packet *pkt)
+{
+    for (auto& ni_out_vc : niOutVcs) {
+        if (ni_out_vc.functionalRead(pkt)) {
+            return true;
+        }
+    }
+
+    for (auto &oPort: outPorts) {
+        if (oPort->outFlitQueue()->functionalRead(pkt)) {
+            return true;
+        }
+    }
+    return false;
+}
+//nghiant_end
 
 bool
 NetworkInterface::functionalRead(Packet *pkt, WriteMask &mask)

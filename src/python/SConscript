@@ -109,6 +109,8 @@ PySource('gem5.components.cachehierarchies.ruby',
 PySource('gem5.components.cachehierarchies.ruby',
     'gem5/components/cachehierarchies/ruby/mesi_two_level_cache_hierarchy.py')
 PySource('gem5.components.cachehierarchies.ruby',
+    'gem5/components/cachehierarchies/ruby/moesi_cmp_directory_cache_hierarchy.py')
+PySource('gem5.components.cachehierarchies.ruby',
     'gem5/components/cachehierarchies/ruby/mi_example_cache_hierarchy.py')
 PySource('gem5.components.cachehierarchies.ruby.caches',
     'gem5/components/cachehierarchies/ruby/caches/__init__.py')
@@ -131,6 +133,17 @@ PySource('gem5.components.cachehierarchies.ruby.caches.mesi_two_level',
     'gem5/components/cachehierarchies/ruby/caches/mesi_two_level/l1_cache.py')
 PySource('gem5.components.cachehierarchies.ruby.caches.mesi_two_level',
     'gem5/components/cachehierarchies/ruby/caches/mesi_two_level/l2_cache.py')
+PySource('gem5.components.cachehierarchies.ruby.caches.moesi_cmp_directory',
+    'gem5/components/cachehierarchies/ruby/caches/moesi_cmp_directory/__init__.py')
+PySource('gem5.components.cachehierarchies.ruby.caches.moesi_cmp_directory',
+    'gem5/components/cachehierarchies/ruby/caches/moesi_cmp_directory/directory.py')
+PySource('gem5.components.cachehierarchies.ruby.caches.moesi_cmp_directory',
+    'gem5/components/cachehierarchies/ruby/caches/moesi_cmp_directory/'
+    'dma_controller.py')
+PySource('gem5.components.cachehierarchies.ruby.caches.moesi_cmp_directory',
+    'gem5/components/cachehierarchies/ruby/caches/moesi_cmp_directory/l1_cache.py')
+PySource('gem5.components.cachehierarchies.ruby.caches.moesi_cmp_directory',
+    'gem5/components/cachehierarchies/ruby/caches/moesi_cmp_directory/l2_cache.py')
 PySource('gem5.components.cachehierarchies.ruby.caches.mi_example',
     'gem5/components/cachehierarchies/ruby/caches/mi_example/__init__.py')
 PySource('gem5.components.cachehierarchies.ruby.caches.mi_example',
@@ -144,6 +157,8 @@ PySource('gem5.components.cachehierarchies.ruby.topologies',
     'gem5/components/cachehierarchies/ruby/topologies/__init__.py')
 PySource('gem5.components.cachehierarchies.ruby.topologies',
     'gem5/components/cachehierarchies/ruby/topologies/simple_pt2pt.py')
+PySource('gem5.components.cachehierarchies.ruby.topologies',
+    'gem5/components/cachehierarchies/ruby/topologies/mesh_nghiant_custom_v2.py')
 PySource('gem5.components.memory', 'gem5/components/memory/__init__.py')
 PySource('gem5.components.memory', 'gem5/components/memory/abstract_memory_system.py')
 PySource('gem5.components.memory', 'gem5/components/memory/dramsim_3.py')

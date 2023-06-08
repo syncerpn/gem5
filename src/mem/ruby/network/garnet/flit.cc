@@ -109,6 +109,7 @@ flit::deserialize(int des_id, int num_flits, uint32_t bWidth)
 void
 flit::print(std::ostream& out) const
 {
+    //nghiant: we dont use this trace
     out << "[flit:: ";
     out << "PacketId=" << m_packet_id << " ";
     out << "Id=" << m_id << " ";
@@ -123,8 +124,23 @@ flit::print(std::ostream& out) const
     out << "Set Time=" << m_time << " ";
     out << "Width=" << m_width<< " ";
     out << "]";
+    //but we will use this one; this relates to garnet trace protocol
+    out << m_time << " ";
+    out << m_packet_id << " ";
+    out << m_route.src_ni << " ";
+    out << m_route.dest_ni << " ";
+    out << m_vnet << " ";
 }
 
+//nghiant: functionalRead now implemented
+//https://www.mail-archive.com/gem5-users@gem5.org/msg19624.html
+bool
+flit::functionalRead(Packet *pkt)
+{
+    Message *msg = m_msg_ptr.get();
+    return msg->functionalRead(pkt);
+}
+//nghiant_end
 bool
 flit::functionalRead(Packet *pkt, WriteMask &mask)
 {

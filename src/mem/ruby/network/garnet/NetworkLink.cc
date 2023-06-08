@@ -119,6 +119,18 @@ NetworkLink::resetStats()
     m_link_utilized = 0;
 }
 
+//nghiant: functionalRead now implemented
+//https://www.mail-archive.com/gem5-users@gem5.org/msg19624.html
+bool
+NetworkLink::functionalRead(Packet *pkt)
+{
+    if (linkBuffer.functionalRead(pkt)) {
+        return true;
+    }
+    return false;
+}
+//nghiant_end
+
 bool
 NetworkLink::functionalRead(Packet *pkt, WriteMask &mask)
 {

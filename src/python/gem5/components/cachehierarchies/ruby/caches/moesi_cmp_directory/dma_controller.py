@@ -1,7 +1,5 @@
-# -*- mode:python -*-
-
-# Copyright (c) 2009 The Hewlett-Packard Development Company
-# All rights reserved.
+# Copyright (c) 2021 The Regents of the University of California
+# All Rights Reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
@@ -26,29 +24,25 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import os
+from ......utils.override import overrides
+from ..abstract_dma_controller import AbstractDMAController
 
-Import('*')
+from m5.objects import MessageBuffer
 
-main.Append(ALL_PROTOCOLS=[
-    'GPU_VIPER',
-    'MOESI_AMD_Base',
-    'MESI_Two_Level',
-    'MESI_Three_Level',
-    'MESI_Three_Level_HTM',
-    'MI_example',
-    'MOESI_CMP_directory',
-    'MOESI_CMP_token',
-    'MOESI_hammer',
-    'Garnet_standalone',
-    'Garnet_trace', #nghiant_230523: add custom Garnet_trace
-    'None'
-    ])
 
-opt = BoolVariable('SLICC_HTML', 'Create HTML files', False)
-sticky_vars.Add(opt)
+class DMAController(AbstractDMAController):
+    def __init__(self, network, cache_line_size):
+        super().__init__(network, cache_line_size)
 
-main.Append(PROTOCOL_DIRS=[Dir('.')])
+    @overrides(AbstractDMAController)
+    def connectQueues(self, network):
+        self.responseFromDir = MessageBuffer(ordered=True)
+        self.responseFromDir.in_port = network.out_port
 
-protocol_base = Dir('.')
-Export('protocol_base')
+        self.reqToDir = MessageBuffer()
+        self.reqToDir.out_port = network.in_port
+        self.respToDir = MessageBuffer()
+        self.respToDir.out_port = network.in_port
+
+        self.mandatoryQueue = MessageBuffer()
+        self.triggerQueue = MessageBuffer()

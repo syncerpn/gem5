@@ -75,6 +75,18 @@ VirtualChannel::need_stage(flit_stage stage, Tick time)
     return false;
 }
 
+//nghiant: functionalRead now implemented
+//https://www.mail-archive.com/gem5-users@gem5.org/msg19624.html
+bool
+VirtualChannel::functionalRead(Packet *pkt)
+{
+    if (inputBuffer.functionalRead(pkt)) {
+        return true;
+    }
+    return false;
+}
+//nghiant_end
+
 bool
 VirtualChannel::functionalRead(Packet *pkt, WriteMask &mask)
 {

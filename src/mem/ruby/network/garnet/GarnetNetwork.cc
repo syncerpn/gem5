@@ -615,6 +615,33 @@ GarnetNetwork::update_traffic_distribution(RouteInfo route)
         (*m_ctrl_traffic_distribution[src_node][dest_node])++;
 }
 
+//nghiant: functionalRead now implemented
+//https://www.mail-archive.com/gem5-users@gem5.org/msg19624.html
+bool
+GarnetNetwork::functionalRead(Packet *pkt)
+{
+    for (unsigned int i = 0; i < m_routers.size(); i++) {
+        if (m_routers[i]->functionalRead(pkt)) {
+            return true;
+        }
+    }
+
+    for (unsigned int i = 0; i < m_nis.size(); ++i) {
+        if (m_nis[i]->functionalRead(pkt)) {
+            return true;
+        }
+    }
+
+    for (unsigned int i = 0; i < m_networklinks.size(); ++i) {
+        if (m_networklinks[i]->functionalRead(pkt)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+//nghiant_end
+
 bool
 GarnetNetwork::functionalRead(Packet *pkt, WriteMask &mask)
 {

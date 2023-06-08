@@ -297,7 +297,7 @@ class X86Board(AbstractSystemBoard, KernelDiskWorkload):
 
     @overrides(KernelDiskWorkload)
     def get_disk_device(self):
-        return "/dev/hda"
+        return "/dev/hda1" #nghiant: original: /dev/hda does not work for custom image file
 
     @overrides(KernelDiskWorkload)
     def _add_disk_to_board(self, disk_image: AbstractResource):

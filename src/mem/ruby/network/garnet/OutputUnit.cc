@@ -172,6 +172,18 @@ OutputUnit::insert_flit(flit *t_flit)
     m_out_link->scheduleEventAbsolute(m_router->clockEdge(Cycles(1)));
 }
 
+//nghiant: functionalRead now implemented
+//https://www.mail-archive.com/gem5-users@gem5.org/msg19624.html
+bool
+OutputUnit::functionalRead(Packet *pkt)
+{
+    if (outBuffer.functionalRead(pkt)) {
+        return true;
+    }
+    return false;
+}
+//nghiant_end
+
 bool
 OutputUnit::functionalRead(Packet *pkt, WriteMask &mask)
 {

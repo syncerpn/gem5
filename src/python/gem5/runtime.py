@@ -105,6 +105,7 @@ def get_runtime_coherence_protocol() -> CoherenceProtocol:
         "mesi_three_level": CoherenceProtocol.MESI_THREE_LEVEL,
         "gpu_viper": CoherenceProtocol.GPU_VIPER,
         "chi": CoherenceProtocol.CHI,
+        "moesi_cmp_directory": CoherenceProtocol.MOESI_CMP_DIRECTORY, #nghiant: dont know why this is not included???
     }
 
     protocol_str = str(buildEnv["PROTOCOL"]).lower()

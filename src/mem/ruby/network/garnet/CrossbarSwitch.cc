@@ -91,6 +91,20 @@ CrossbarSwitch::wakeup()
     }
 }
 
+//nghiant: functionalRead now implemented
+//https://www.mail-archive.com/gem5-users@gem5.org/msg19624.html
+bool
+CrossbarSwitch::functionalRead(Packet *pkt)
+{
+    for (auto& switch_buffer : switchBuffers) {
+        if (switch_buffer.functionalRead(pkt)) {
+            return true;
+        }
+    }
+    return false;
+}
+//nghiant_end
+
 bool
 CrossbarSwitch::functionalRead(Packet *pkt, WriteMask &mask)
 {

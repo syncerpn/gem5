@@ -1,0 +1,5 @@
+protocol "Garnet_trace";
+include "RubySlicc_interfaces.slicc";
+include "Garnet_trace-msg.sm";
+include "Garnet_trace-cache.sm";
+include "Garnet_trace-dir.sm";

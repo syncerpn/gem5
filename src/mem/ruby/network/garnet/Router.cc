@@ -274,6 +274,31 @@ Router::printAggregateFaultProbability(std::ostream& out)
     out << aggregate_fault_prob << std::endl;
 }
 
+//nghiant: functionalRead now implemented
+//https://www.mail-archive.com/gem5-users@gem5.org/msg19624.html
+bool
+Router::functionalRead(Packet *pkt)
+{
+    if (crossbarSwitch.functionalRead(pkt)) {
+        return true;
+    }
+
+    for (uint32_t i = 0; i < m_input_unit.size(); i++) {
+        if (m_input_unit[i]->functionalRead(pkt)) {
+            return true;
+        }
+    }
+
+    for (uint32_t i = 0; i < m_output_unit.size(); i++) {
+        if (m_output_unit[i]->functionalRead(pkt)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+//nghiant_end
+
 bool
 Router::functionalRead(Packet *pkt, WriteMask &mask)
 {

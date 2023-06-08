@@ -151,6 +151,21 @@ InputUnit::increment_credit(int in_vc, bool free_signal, Tick curTime)
     m_credit_link->scheduleEventAbsolute(m_router->clockEdge(Cycles(1)));
 }
 
+//nghiant: functionalRead now implemented
+//https://www.mail-archive.com/gem5-users@gem5.org/msg19624.html
+bool
+InputUnit::functionalRead(Packet *pkt)
+{
+    for (auto& virtual_channel : virtualChannels) {
+        if (virtual_channel.functionalRead(pkt)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+//nghiant_end
+
 bool
 InputUnit::functionalRead(Packet *pkt, WriteMask &mask)
 {

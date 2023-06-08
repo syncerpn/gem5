@@ -391,7 +391,7 @@ Sequencer::recordMissLatency(SequencerRequest* srequest, bool llscSuccess,
         // initialRequestTime corresponding the earlier request.  Since Cycles
         // is unsigned, we can't let this request get profiled below.
 
-        total_lat = Cycles(0);
+        // total_lat = Cycles(0); //nghiant
     }
 
     DPRINTFR(ProtocolTrace, "%15s %3s %10s%20s %6s>%-6s %s %d cycles\n",

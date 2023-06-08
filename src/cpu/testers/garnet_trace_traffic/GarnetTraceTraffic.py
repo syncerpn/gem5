@@ -1,6 +1,4 @@
-# -*- mode:python -*-
-
-# Copyright (c) 2009 The Hewlett-Packard Development Company
+# Copyright (c) 2016 Georgia Institute of Technology
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -26,29 +24,28 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import os
+from m5.objects.ClockedObject import ClockedObject
+from m5.params import *
+from m5.proxy import *
 
-Import('*')
+class GarnetTraceTraffic(ClockedObject):
+    type = 'GarnetTraceTraffic'
+    cxx_header = \
+        "cpu/testers/garnet_trace_traffic/GarnetTraceTraffic.hh"
+    cxx_class = 'gem5::GarnetTraceTraffic'
 
-main.Append(ALL_PROTOCOLS=[
-    'GPU_VIPER',
-    'MOESI_AMD_Base',
-    'MESI_Two_Level',
-    'MESI_Three_Level',
-    'MESI_Three_Level_HTM',
-    'MI_example',
-    'MOESI_CMP_directory',
-    'MOESI_CMP_token',
-    'MOESI_hammer',
-    'Garnet_standalone',
-    'Garnet_trace', #nghiant_230523: add custom Garnet_trace
-    'None'
-    ])
-
-opt = BoolVariable('SLICC_HTML', 'Create HTML files', False)
-sticky_vars.Add(opt)
-
-main.Append(PROTOCOL_DIRS=[Dir('.')])
-
-protocol_base = Dir('.')
-Export('protocol_base')
+    block_offset = Param.Int(6, "block offset in bits")
+    num_dest = Param.Int(1, "Number of Destinations")
+    memory_size = Param.Int(65536, "memory size")
+    sim_cycles = Param.Int(1000, "Number of simulation cycles")
+    num_packets_max = Param.Int(-1, "Max number of packets to send. \
+                        Default is to keep sending till simulation ends")
+    inj_vnet = Param.Int(-1, "Vnet to inject in. \
+                              0 and 1 are 1-flit, 2 is 5-flit. \
+                                Default is to inject in all three vnets")
+    response_limit = Param.Cycles(100000000, "Cycles before exiting \
+                                            due to lack of progress")
+    test = RequestPort("Port to the memory system to test")
+    system = Param.System(Parent.any, "System we belong to")
+    trace = Param.String("", "trace file")
+    cpu_id = Param.Int(0, "CPU ID")

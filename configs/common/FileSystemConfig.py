@@ -140,6 +140,15 @@ def config_filesystem(system, options=None):
         )
         file_append((procdir, "cpuinfo"), one_cpu)
 
+    #nghiant 221206: trying fix the way around 'meminfo' kind of things;
+    #since running mpi-based workload requires parsing this file, the file needs to be existed in /proc/ as the way an actual system is
+    #what will be done is trying to create a similar file at the same place
+    #we will see what could happen
+    meminfo_content = f'MemTotal: {int(toMemorySize(options.mem_size) / kibi)}kB'
+
+    file_append((procdir, 'meminfo'), meminfo_content)
+    #nghiant_end
+
     file_append((procdir, "stat"), "cpu 0 0 0 0 0 0 0\n")
     for i in range(len(cpus)):
         file_append((procdir, "stat"), "cpu%d 0 0 0 0 0 0 0\n" % i)
