@@ -110,20 +110,20 @@ void
 flit::print(std::ostream& out) const
 {
     //nghiant: we dont use this trace
-    out << "[flit:: ";
-    out << "PacketId=" << m_packet_id << " ";
-    out << "Id=" << m_id << " ";
-    out << "Type=" << m_type << " ";
-    out << "Size=" << m_size << " ";
-    out << "Vnet=" << m_vnet << " ";
-    out << "VC=" << m_vc << " ";
-    out << "Src NI=" << m_route.src_ni << " ";
-    out << "Src Router=" << m_route.src_router << " ";
-    out << "Dest NI=" << m_route.dest_ni << " ";
-    out << "Dest Router=" << m_route.dest_router << " ";
-    out << "Set Time=" << m_time << " ";
-    out << "Width=" << m_width<< " ";
-    out << "]";
+    // out << "[flit:: ";
+    // out << "PacketId=" << m_packet_id << " ";
+    // out << "Id=" << m_id << " ";
+    // out << "Type=" << m_type << " ";
+    // out << "Size=" << m_size << " ";
+    // out << "Vnet=" << m_vnet << " ";
+    // out << "VC=" << m_vc << " ";
+    // out << "Src NI=" << m_route.src_ni << " ";
+    // out << "Src Router=" << m_route.src_router << " ";
+    // out << "Dest NI=" << m_route.dest_ni << " ";
+    // out << "Dest Router=" << m_route.dest_router << " ";
+    // out << "Set Time=" << m_time << " ";
+    // out << "Width=" << m_width<< " ";
+    // out << "]";
     //but we will use this one; this relates to garnet trace protocol
     out << m_time << " ";
     out << m_packet_id << " ";
