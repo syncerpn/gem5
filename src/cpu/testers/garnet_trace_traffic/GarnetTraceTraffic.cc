@@ -78,13 +78,6 @@ TracePacket parse_trace_gn(const std::string& trace_line) {
 
     std::stringstream ss(trace_line);
     unsigned long long num1;
-    // unsigned int num2, num3, num4, num5;
-    // ss >> num1 >> num2 >> num3 >> num4 >> num5;
-    // p.tick = num1;
-    // p.src = num2;
-    // p.dest = num3;
-    // p.vnet = num4;
-    // p.psize = num5;
 
     unsigned int num2, num3, num4;
     ss >> num1 >> num2 >> num3 >> num4;
@@ -92,34 +85,6 @@ TracePacket parse_trace_gn(const std::string& trace_line) {
     p.src = num2;
     p.dest = num3;
     p.vnet = num4;
-
-    return p;
-}
-
-//nghiant_230503: old method, which fits the full trace; please use parse_trace_gn for garnet-specific trace
-TracePacket parse_trace(const std::string& trace_line) {
-    TracePacket p;
-    // assert(trace_line);
-
-    size_t pos = trace_line.find(":");
-    assert(pos != std::string::npos); //if not found
-
-    std::string num_str = trace_line.substr(0, pos);
-    p.tick = std::stoull(num_str);
-
-    // Extract the number after SrcRouter (17)
-    pos = trace_line.find("SrcRouter=");
-    assert(pos != std::string::npos); //if not found
-
-    std::string src_router_str = trace_line.substr(pos + 10); // 10 is the length of "SrcRouter="
-    p.src = std::stoul(src_router_str);
-
-    // Extract the number after DestRouter (18)
-    pos = trace_line.find("DestRouter=");
-    assert(pos != std::string::npos); //if not found
-
-    std::string dest_router_str = trace_line.substr(pos + 11); // 11 is the length of "DestRouter="
-    p.dest = std::stoul(dest_router_str);
 
     return p;
 }
@@ -132,11 +97,9 @@ GarnetTraceTraffic::GarnetTraceTraffic(const Params &p)
       retryPkt(NULL),
       size(p.memory_size),
       blockSizeBits(p.block_offset),
-      numDestinations(p.num_dest),
       simCycles(p.sim_cycles),
       numPacketsMax(p.num_packets_max),
       numPacketsSent(0),
-      injVnet(p.inj_vnet),
       responseLimit(p.response_limit),
       requestorId(p.system->getRequestorId(this)),
       tracefile(p.trace),
@@ -197,21 +160,18 @@ GarnetTraceTraffic::completeRequest(PacketPtr pkt)
 void
 GarnetTraceTraffic::tick()
 {   
-    // std::cout << "[INFO] [nghiant] curTick " << curTick() << std::endl;
     if (++noResponseCycles >= responseLimit) {
         fatal("%s deadlocked at cycle %d\n", name(), curTick());
     }
 
     int dest = -1;
     int vnet = -1;
-    int psize = 1;
     bool senderEnable = false;
     
     if (cur_packet < packets.size()) {
         if (packets[cur_packet].tick == curTick()) {
             dest = packets[cur_packet].dest;
             vnet = packets[cur_packet].vnet;
-            psize = packets[cur_packet].psize;
             ++cur_packet;
             senderEnable = true;
         }
@@ -221,7 +181,7 @@ GarnetTraceTraffic::tick()
         senderEnable = false;
 
     if (senderEnable) {
-        generatePkt(dest, vnet, psize);
+        generatePkt(dest, vnet);
     }
 
     // Schedule wakeup
@@ -234,12 +194,8 @@ GarnetTraceTraffic::tick()
 }
 
 void
-GarnetTraceTraffic::generatePkt(uint32_t destination, uint32_t vnet, uint32_t psize)
+GarnetTraceTraffic::generatePkt(uint32_t destination, uint32_t vnet)
 {
-    // int source = id;
-    // The source of the packets is a cache.
-    // The destination of the packets is a directory.
-    // The destination bits are embedded in the address after byte-offset.
     Addr paddr =  destination;
     paddr <<= blockSizeBits;
     unsigned access_size = 1; // Does not affect Ruby simulation
@@ -276,7 +232,6 @@ GarnetTraceTraffic::generatePkt(uint32_t destination, uint32_t vnet, uint32_t ps
     // Inject in specific Vnet
     // Vnet 0 and 1 are for control packets (1-flit)
     // Vnet 2 is for data packets (5-flit)
-    // int injReqType = injVnet; //nghiant: with trace-based, vnet info is in the packet
     int injReqType = vnet;
 
     if (injReqType < 0 || injReqType > 2)
@@ -297,21 +252,10 @@ GarnetTraceTraffic::generatePkt(uint32_t destination, uint32_t vnet, uint32_t ps
         req = std::make_shared<Request>(
             0x0, access_size, flags, requestorId, 0x0, 0);
         req->setPaddr(paddr);
-    } else {  // if (injReqType == 2)
-        // generate packet for virtual network 2
-
-        // if (psize > 1) {
-            // std::cout << "---------------------packet 5" << std::endl;
-            requestType = MemCmd::WriteReq;
-            req = std::make_shared<Request>(paddr, access_size, flags,
+    } else {
+        requestType = MemCmd::WriteReq;
+        req = std::make_shared<Request>(paddr, access_size, flags,
                                             requestorId);
-        // } else {
-        //     std::cout << "---------------------packet 1" << std::endl;
-        //     requestType = MemCmd::StoreCondReq;
-        //     req = std::make_shared<Request>(paddr, access_size, flags,
-        //                                     requestorId);
-        // }
-            
     }
 
     req->setContext(id);

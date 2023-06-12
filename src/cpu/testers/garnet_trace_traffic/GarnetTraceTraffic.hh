@@ -48,7 +48,6 @@ struct TracePacket {
   uint32_t src;
   uint32_t dest;
   uint32_t vnet;
-  uint32_t psize;
 };
 
 class Packet;
@@ -114,12 +113,9 @@ class GarnetTraceTraffic : public ClockedObject
 
     Tick noResponseCycles;
 
-    int numDestinations;
     Tick simCycles;
     int numPacketsMax;
     int numPacketsSent;
-
-    int injVnet;
 
     const Cycles responseLimit;
 
@@ -132,7 +128,7 @@ class GarnetTraceTraffic : public ClockedObject
 
     void completeRequest(PacketPtr pkt);
 
-    void generatePkt(uint32_t destination, uint32_t vnet, uint32_t psize);
+    void generatePkt(uint32_t destination, uint32_t vnet);
     void sendPkt(PacketPtr pkt);
     void initTrafficType();
 

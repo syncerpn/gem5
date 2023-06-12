@@ -1,0 +1,14 @@
+4 4
+L1Cache_Controller 0 1 1
+L1Cache_Controller 1 1 0
+L1Cache_Controller 2 0 1
+L1Cache_Controller 3 1 2
+L1Cache_Controller 4 3 2
+L1Cache_Controller 5 3 1
+L1Cache_Controller 6 3 0
+L1Cache_Controller 7 2 0
+L2Cache_Controller 0 2 1
+Directory_Controller 0 2 2
+Directory_Controller 1 2 2
+DMA_Controller 0 2 2
+DMA_Controller 1 2 2
