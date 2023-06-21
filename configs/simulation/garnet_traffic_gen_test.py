@@ -53,8 +53,8 @@ def random_device_placement(n_device, n_port):
 
 #hyper-param settings
 n_port_per_node = 1
-pattern = ['system.ruby.network.average_flit_latency']
-# pattern = ['system.ruby.network.average_packet_latency']
+# pattern = ['system.ruby.network.average_flit_latency']
+pattern = ['system.ruby.network.average_packet_latency']
 
 #prepare command
 best_perf = 99999
