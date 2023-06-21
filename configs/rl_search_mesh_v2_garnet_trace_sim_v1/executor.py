@@ -22,6 +22,24 @@ def parse_output(file, patterns):
 def get_mesh_index(i, row, col):
     return (i % col, i // col)
 
+def analyze_and_reformat_sys_trace(sys_trace, net_trace):
+    last_scheduled_cycle = 0
+    with open(net_trace, 'w') as nf:
+        with open(sys_trace, 'r') as f:
+            rawdata = f.readline().strip()
+            while rawdata:
+                data = rawdata.split(' ')[2:]
+                c, pid, s, d, v = list(map(int, data))
+                k = f'{s}.{d}'
+                if pid == 0:
+                    nf.write(' '.join(list(map(str,[c,s,d,v]))) + '\n')
+                    last_scheduled_cycle = max(last_scheduled_cycle, c)
+                    
+                rawdata = f.readline().strip()
+
+    return last_scheduled_cycle
+
+
 class SystemExecutor():
     def __init__(self, gem5_bin, sim_sys, num_cpus, workload_list, workload_args_list, protocol, mesh_row, mesh_col, n_port_per_node):
         self.gem5_bin=gem5_bin
@@ -162,6 +180,7 @@ class NetworkExecutor:
         trial_out_dir_counter = self.trial_out_dir + str(self.trial_counter) + '/'
         os.makedirs(trial_out_dir_counter, exist_ok=True)
         for wi in range(self.n_workload):
+
             print(f'[INFO] workload #{wi}')
             trial_out_dir_counter_wi = trial_out_dir_counter + str(wi) + '/'
             os.makedirs(trial_out_dir_counter_wi, exist_ok=True)
@@ -170,7 +189,12 @@ class NetworkExecutor:
             stats_file  = trial_out_dir_counter_wi + 'stats'
             placement_file = trial_out_dir_counter_wi + 'placement'
             
-            converted_trace = self.trace + '_converted'
+            converted_trace = trial_out_dir_counter_wi + 'trace_converted'
+            converted_trace_gn = trial_out_dir_counter_wi + 'trace_converted_gn'
+
+            #the following remove gem5's default trace prefix, which is cycle: device_name: <true content>
+            last_scheduled_cycle = analyze_and_reformat_sys_trace(self.trace, converted_trace)
+            sim_cycle = last_scheduled_cycle + 1000000
 
             simulation_cmd  = [self.gem5_bin]
 
@@ -181,7 +205,7 @@ class NetworkExecutor:
             simulation_cmd.append('--network=garnet')
             simulation_cmd.append('--topology=Mesh_gn')
             simulation_cmd.append('--placement-file=' + placement_file)
-            simulation_cmd.append('--trace=' + converted_trace)
+            simulation_cmd.append('--trace=' + converted_trace_gn)
             simulation_cmd.append('--num-cpus=' + str(self.num_cpus))
             simulation_cmd.append('--cpu-clock=2GHz')
             simulation_cmd.append('--mem-type=DDR4_2400_16x4')
@@ -195,7 +219,7 @@ class NetworkExecutor:
             simulation_cmd.append('--l2_size=128MB')
             simulation_cmd.append('--l2_assoc=16')
             simulation_cmd.append('--cacheline_size=64')
-            simulation_cmd.append('--sim-cycles=800000000')
+            simulation_cmd.append('--sim-cycles=' + str(sim_cycle))
 
             simulation_cmd = ' '.join(simulation_cmd)
             script_file_f = open(script_file, 'w')
@@ -228,13 +252,14 @@ class NetworkExecutor:
                 
                 f.write('\n'.join(lines))
 
-            with open(self.trace, 'r') as f:
-                with open(converted_trace, 'w') as nf:
+            #still need to convert into source_id -> destination_router_id
+            with open(converted_trace, 'r') as f:
+                with open(converted_trace_gn, 'w') as nf:
                     data = f.readline().strip('\n')
                     while data:
                         cycle, s, d, v = map(int, data.split(' '))
-                        new_d = occupied[d]
-                        nf.write(' '.join([str(cycle),str(s),str(new_d),str(v)])+'\n')
+                        router_d = config[d]
+                        nf.write(' '.join([str(cycle),str(s),str(router_d),str(v)])+'\n')
                             
                         data = f.readline().strip('\n')
 
