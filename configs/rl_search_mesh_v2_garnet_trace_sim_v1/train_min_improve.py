@@ -19,7 +19,7 @@ parser = argparse.ArgumentParser(description='PyTorch actor-critic example')
 args = parser.parse_args()
 
 #NORMAL SYSTEM
-SYS_BIN = './build/X86_MOESI_CMP_directory_opt/gem5.opt'
+SYS_BIN = './build/X86_MOESI_CMP_directory/gem5.opt'
 SYS_DEF = './configs/simulation/sim_system.py'
 SYS_OUT = './sim_output/'
 
@@ -49,7 +49,7 @@ WORKLOAD_LIST      = [
 WORKLOAD_ARGS_LIST = [
                         # 'kernel',
                         # 'input_bodytrack_simdev/sequenceB_1 4 1 100 3 0 32',
-                        '32 input_blackscholes_simsmall/in_4K.txt input_blackscholes_simsmall/test_output.txt',
+                        '32 ../gem5/input_blackscholes_simsmall/in_4K.txt ../gem5/input_blackscholes_simsmall/test_output.txt',
                         # 'input_freqmine_simdev/T10I4D100K_1k.dat 3',
                       ]
 
