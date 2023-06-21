@@ -1,2 +1,2 @@
-TARGET_ISA = 'null'
+TARGET_ISA = 'x86'
 PROTOCOL = 'Garnet_trace'
