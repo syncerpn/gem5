@@ -65,7 +65,6 @@ else:
     sys.exit(1)
 
 print('[INFO] # of CPUs:', np)
-print('[INFO] Building Environment:', buildEnv['TARGET_ISA'])
 print('[INFO] Memory size:', args.mem_size)
 print('[INFO] # of Memory Channels:', args.mem_channels)
 print('[INFO] # of Memory Ranks:', args.mem_ranks)
