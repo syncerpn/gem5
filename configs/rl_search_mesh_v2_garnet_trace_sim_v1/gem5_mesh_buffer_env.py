@@ -47,7 +47,7 @@ class gem5_mesh_buffer_env():
         config = np.array(all_ports[:self.n_device]).astype(np.int32)
         state = self._get_obs(config)
 
-        return config, state, perf
+        return config, state
 
     def _get_obs(self, config):
         mesh = np.zeros((1, self.n_device, self.n_port), dtype=np.float32)
