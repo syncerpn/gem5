@@ -45,6 +45,8 @@ class SystemExecutor():
         return self.trial_out_dir + '_'.join([str(x) for x in config]) + '/'
 
     def execute(self, config):
+        perfs = np.zeros(len(self.workload_list))
+
         trial_out_dir_counter = self.folder_name_from_config(config)
         os.makedirs(trial_out_dir_counter, exist_ok=True)
 
@@ -128,11 +130,11 @@ class SystemExecutor():
             result = parse_output(stats_file, self.patterns)
             result_list = result[0].split(' ')
             result_list = [t for t in result_list if t != '']
-            sim_sec = float(result_list[1]) * 1000000.0 #(microsecs)
+            perf = float(result_list[1]) * 1000000.0 #(microsecs)
 
-            sim_secs[wi] = sim_sec
+            perfs[wi] = perf
 
-        return sim_secs
+        return perfs
 
 class NetworkExecutor:
     def __init__(self, gem5_bin, sim_sys, num_cpus, n_workload, protocol, mesh_row, mesh_col, n_port_per_node):
