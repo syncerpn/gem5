@@ -70,7 +70,7 @@ LOG_INTERVAL = 100
 BUFFER_DUMPING_INTERVAL = 1
 
 # ENV
-BUFFER_DIR = '_'.join(['buffer_save', SYS_PROTOCOL] + list(map(str, [NUM_CPUS, MESH_COL, MESH_ROW])))
+BUFFER_DIR = '_'.join(['buffer_save', PROTOCOL] + list(map(str, [NUM_CPUS, MESH_COL, MESH_ROW])))
 if not os.path.exists(BUFFER_DIR):
     os.system('mkdir ' + BUFFER_DIR)
 
