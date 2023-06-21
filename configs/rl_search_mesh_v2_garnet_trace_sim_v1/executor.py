@@ -161,8 +161,8 @@ class NetworkExecutor:
 
         trial_out_dir_counter = self.trial_out_dir + str(self.trial_counter) + '/'
         os.makedirs(trial_out_dir_counter, exist_ok=True)
-        for wi, workload, workload_args in zip(list(range(len(self.workload_list))), self.workload_list, self.workload_args_list):
-            print('[INFO] workload: ' + workload + ' ' + workload_args)
+        for wi in range(self.n_workload):
+            print(f'[INFO] workload #{wi}')
             trial_out_dir_counter_wi = trial_out_dir_counter + str(wi) + '/'
             os.makedirs(trial_out_dir_counter_wi, exist_ok=True)
 
