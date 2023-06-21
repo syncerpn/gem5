@@ -173,7 +173,7 @@ def main():
 
         # take the action
         # print('[INFO] --explore phase')
-        new_config, new_state, new_perf = env.step(config, action_d.numpy(), action_p.numpy())
+        new_config, new_state = env.step(config, action_d.numpy(), action_p.numpy())
         new_perf = env.estimate_performance(new_config)
 
         if new_perf < best_perf:
