@@ -1,3 +1,2 @@
 USE_X86_ISA = True
 PROTOCOL = 'Garnet_trace'
-TARGET_ISA = 'x86'
