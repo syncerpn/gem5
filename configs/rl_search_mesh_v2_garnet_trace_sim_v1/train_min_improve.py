@@ -149,7 +149,7 @@ def main():
 
         # print('[INFO] --exploit phase')
         new_config_map, new_state_map = env.step(config, action_d_map.numpy(), action_p_map.numpy())
-        new_perf_map = self.estimate_performance(new_config_map)
+        new_perf_map = env.estimate_performance(new_config_map)
 
         if new_perf_map < best_perf:
             best_perf = new_perf_map
@@ -174,7 +174,7 @@ def main():
         # take the action
         # print('[INFO] --explore phase')
         new_config, new_state, new_perf = env.step(config, action_d.numpy(), action_p.numpy())
-        new_perf = self.estimate_performance(new_config)
+        new_perf = env.estimate_performance(new_config)
 
         if new_perf < best_perf:
             best_perf = new_perf
