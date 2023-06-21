@@ -182,6 +182,12 @@ class NetworkExecutor:
         for wi in range(self.n_workload):
 
             print(f'[INFO] workload #{wi}')
+            num_fake_cpus = 0
+            num_dirs = 0
+            if self.protocol == "moesi":
+                num_fake_cpus = 2 #L2 cache
+                num_dirs = self.mesh_row * self.mesh_col
+
             trial_out_dir_counter_wi = trial_out_dir_counter + str(wi) + '/'
             os.makedirs(trial_out_dir_counter_wi, exist_ok=True)
 
@@ -206,7 +212,8 @@ class NetworkExecutor:
             simulation_cmd.append('--topology=Mesh_gn')
             simulation_cmd.append('--placement-file=' + placement_file)
             simulation_cmd.append('--trace=' + converted_trace_gn)
-            simulation_cmd.append('--num-cpus=' + str(self.num_cpus))
+            simulation_cmd.append('--num-cpus=' + str(self.num_cpus + num_fake_cpus))
+            simulation_cmd.append('--num-dirs=' + str(num_dirs))
             simulation_cmd.append('--cpu-clock=2GHz')
             simulation_cmd.append('--mem-type=DDR4_2400_16x4')
             simulation_cmd.append('--mem-size=4GB')
