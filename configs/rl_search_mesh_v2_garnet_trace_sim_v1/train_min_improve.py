@@ -49,7 +49,8 @@ WORKLOAD_LIST      = [
 WORKLOAD_ARGS_LIST = [
                         # 'kernel',
                         # 'input_bodytrack_simdev/sequenceB_1 4 1 100 3 0 32',
-                        '32 ../gem5/input_blackscholes_simsmall/in_4K.txt ../gem5/input_blackscholes_simsmall/test_output.txt',
+                        # '32 ../gem5/input_blackscholes_simsmall/in_4K.txt ../gem5/input_blackscholes_simsmall/test_output.txt',
+                        '32 ../gem5/input_blackscholes_simdev/in_16.txt ../gem5/input_blackscholes_simdev/test_output.txt',
                         # 'input_freqmine_simdev/T10I4D100K_1k.dat 3',
                       ]
 
