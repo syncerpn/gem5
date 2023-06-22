@@ -45,6 +45,7 @@ class gem5_mesh_buffer_env():
         all_ports = list(range(self.n_port))
         np.random.shuffle(all_ports)
         config = np.array(all_ports[:self.n_device]).astype(np.int32)
+        config = np.array([57,13,47,53,37,14,51,46,16,41,35,48,28,61,19,36,8,56,55,40,38,20,33,23,7,21,45,42,60,29,49,11,50,18]).astype(np.int32) #hack
         state = self._get_obs(config)
 
         return config, state
