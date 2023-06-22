@@ -108,7 +108,7 @@ def define_options(parser):
         "--garnet-deadlock-threshold",
         action="store",
         type=int,
-        default=50000,
+        default=5000000, #nghiant: modify this default value; with large scale experiment, this with low value causes lots of problems
         help="network-level deadlock threshold.",
     )
     parser.add_argument(
