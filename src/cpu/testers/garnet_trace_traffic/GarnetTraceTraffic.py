@@ -36,7 +36,7 @@ class GarnetTraceTraffic(ClockedObject):
 
     block_offset = Param.Int(6, "block offset in bits")
     memory_size = Param.Int(65536, "memory size")
-    sim_cycles = Param.Int(1000, "Number of simulation cycles")
+    sim_cycles = Param.UInt64(1000, "Number of simulation cycles")
     num_packets_max = Param.Int(-1, "Max number of packets to send. \
                         Default is to keep sending till simulation ends")
     response_limit = Param.Cycles(100000000, "Cycles before exiting \
