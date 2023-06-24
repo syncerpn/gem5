@@ -206,7 +206,7 @@ def main():
         if i_episode % LOG_INTERVAL == 0:
             print('[INFO] Episode {}\tLast reward: {:.5f}\tAverage reward: {:.5f}\tLoss: {:.5f}'.format(
                   i_episode, reward, running_reward, loss))
-            policy_model.save(args.save_dir, i_episode)
+            # policy_model.save(args.save_dir, i_episode)
             print('[INFO] best estimated performance %f' % best_perf)
             print('[INFO] best estimated config ', best_config)
             perf_actual = env.check_performance(best_config)
