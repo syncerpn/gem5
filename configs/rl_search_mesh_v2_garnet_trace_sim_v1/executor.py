@@ -277,7 +277,7 @@ class NetworkExecutor:
             result = parse_output(stats_file, self.patterns)
             result_list = result[0].split(' ')
             result_list = [t for t in result_list if t != '']
-            perf = float(result_list[1]) #(nanasec ??)
+            perf = float(result_list[1] / 1_000_000) #(nanasec ??)
 
             perfs[wi] = perf
 
