@@ -210,6 +210,9 @@ def main():
             print('[INFO] best estimated performance %f' % best_perf)
             print('[INFO] best estimated config ', best_config)
             perf_actual = env.check_performance(best_config)
+            #nghiant_230719: because the best_perf is estimated, it changes wrt the new trace; better recheck the best_perf so that the value does not matter but only the rank does
+            # after check_performance, new trace is probably applied to network_executor
+            best_perf = env.estimate_performance(best_config)
             env.dump_buffer_to_file()
 
 if __name__ == '__main__':
