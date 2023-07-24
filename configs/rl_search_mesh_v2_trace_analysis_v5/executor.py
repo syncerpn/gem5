@@ -87,7 +87,7 @@ def distance(a, b):
     xb, yb = b
     return abs(xa - xb) + abs(ya - yb)
 
-class executor():
+class Executor():
     def __init__(self, gem5_bin, sim_sys, num_cpus, workload_list, workload_args_list, protocol, mesh_row, mesh_col, n_port_per_node):
         self.trial_counter=0
         self.gem5_bin=gem5_bin

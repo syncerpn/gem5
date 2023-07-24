@@ -12,7 +12,7 @@ from torch.distributions import Categorical
 import os
 
 import gem5_mesh_buffer_env as gem5gym
-import executor
+from executor import Executor
 import model
 
 parser = argparse.ArgumentParser(description='PyTorch actor-critic example')
@@ -23,27 +23,26 @@ if not os.path.exists(args.save_dir):
     os.system('mkdir ' + args.save_dir)
 
 #EXECUTOR
-GEM5_BIN      = '/home/nghiant/git/gem5/build/X86_MOESI_CMP_directory_opt/gem5.opt'
-SIM_SYS       = '/home/nghiant/git/gem5/configs/simulation/sim_system.py'
-OUT_DIR       = '/home/nghiant/git/gem5/sim_output/'
+GEM5_BIN      = './build/X86_MOESI_CMP_directory/gem5.opt'
+SIM_SYS       = './configs/simulation/sim_system.py'
+OUT_DIR       = './sim_output/'
 
 if not os.path.exists(OUT_DIR):
     os.system('mkdir ' + OUT_DIR)
 
 WORKLOAD_LIST      = [
-                        # '/home/nghiant/git/gem5/workload/darknet/darknet_arm',
-                        # '/home/nghiant/git/gem5/workload/parsec-3.0/pkgs/apps/bodytrack/inst/amd64-linux.gcc-openmp/bin/bodytrack',
+                        '/home/nghiant/git/gem5/workload/darknet/darknet_x86',
                         # '/home/nghiant/git/gem5/workload/parsec-3.0/pkgs/apps/bodytrack/inst/amd64-linux.gcc-openmp/bin/bodytrack',
                         # '/home/nghiant/git/gem5/workload/parsec-3.0/pkgs/apps/blackscholes/inst/amd64-linux.gcc-openmp/bin/blackscholes',
-                        # '/home/nghiant/git/gem5/workload/parsec-3.0/pkgs/apps/blackscholes/inst/amd64-linux.aarch64/bin/blackscholes',
-                        '/home/nghiant/git/gem5/workload/parsec-3.0/pkgs/apps/freqmine/inst/amd64-linux.gcc-openmp/bin/freqmine',
+                        # '/home/nghiant/git/gem5/workload/parsec-3.0/pkgs/apps/freqmine/inst/amd64-linux.gcc-openmp/bin/freqmine',
                       ]
 
 WORKLOAD_ARGS_LIST = [
-                        # 'kernel',
+                        'kernel',
                         # 'input_bodytrack_simdev/sequenceB_1 4 1 100 3 0 32',
-                        # '32 input_blackscholes_simsmall/in_4K.txt input_blackscholes_simsmall/test_output.txt',
-                        'input_freqmine_simdev/T10I4D100K_1k.dat 3',
+                        # '32 ../gem5/input_blackscholes_simsmall/in_4K.txt ../gem5/input_blackscholes_simsmall/test_output.txt',
+                        # '32 ../gem5/input_blackscholes_test/in_4.txt ../gem5/input_blackscholes_test/test_output.txt',
+                        # 'input_freqmine_simdev/T10I4D100K_1k.dat 3',
                       ]
 
 PROTOCOL = 'moesi'
@@ -51,11 +50,8 @@ NUM_CPUS = 32
 MESH_COL = 8
 MESH_ROW = 8
 N_PORT_PER_NODE = 1
-
 N_DEVICE = NUM_CPUS + 2
 N_PORT = MESH_COL * MESH_ROW * N_PORT_PER_NODE
-
-all_options = [NUM_CPUS, MESH_COL, MESH_ROW]
 
 #RL SEARCH MODEL
 POLICY_CONFIG = 'SimpleFC1'
@@ -66,13 +62,29 @@ LOG_INTERVAL = 100
 BUFFER_DUMPING_INTERVAL = 1
 
 # ENV
-BUFFER_DIR = '_'.join(['buffer_mesh_v2_trace_analysis_2_test_freqmine', PROTOCOL] + list(map(str, all_options)))
+BUFFER_DIR = '_'.join(['buffer_save', PROTOCOL] + list(map(str, [NUM_CPUS, MESH_COL, MESH_ROW])))
 if not os.path.exists(BUFFER_DIR):
     os.system('mkdir ' + BUFFER_DIR)
 
 #============================================================================================
-exe = executor.executor(gem5_bin=GEM5_BIN, sim_sys=SIM_SYS, num_cpus=NUM_CPUS, workload_list=WORKLOAD_LIST, workload_args_list=WORKLOAD_ARGS_LIST, protocol=PROTOCOL, mesh_row=MESH_ROW, mesh_col=MESH_COL, n_port_per_node=N_PORT_PER_NODE)
-env = gem5gym.gem5_mesh_buffer_env(n_device=N_DEVICE, n_port=N_PORT, buffer_dir=BUFFER_DIR, executer=exe, buffer_dumping_interval=BUFFER_DUMPING_INTERVAL)
+exe = Executor(gem5_bin=GEM5_BIN,
+    sim_sys=SIM_SYS,
+    num_cpus=NUM_CPUS,
+    workload_list=WORKLOAD_LIST,
+    workload_args_list=WORKLOAD_ARGS_LIST,
+    protocol=PROTOCOL,
+    mesh_row=MESH_ROW,
+    mesh_col=MESH_COL,
+    n_port_per_node=N_PORT_PER_NODE
+    )
+
+env = gem5gym.gem5_mesh_buffer_env(
+    n_device=N_DEVICE,
+    n_port=N_PORT,
+    buffer_dir=BUFFER_DIR,
+    executer=exe,
+    buffer_dumping_interval=BUFFER_DUMPING_INTERVAL
+    )
 
 policy_model = model.config_policy_model(POLICY_CONFIG, STATE_DIM, N_DEVICE, N_PORT)
 optimizer = optim.Adam(policy_model.parameters(), lr=1e-2, weight_decay=0.0001)
@@ -170,10 +182,13 @@ def main():
         if i_episode % LOG_INTERVAL == 0:
             print('[INFO] Episode {}\tLast reward: {:.5f}\tAverage reward: {:.5f}\tLoss: {:.5f}'.format(
                   i_episode, reward, running_reward, loss))
-            policy_model.save(args.save_dir, i_episode)
+            # policy_model.save(args.save_dir, i_episode)
             print('[INFO] best estimated performance %f' % best_perf)
             print('[INFO] best estimated config ', best_config)
             perf_actual = env.check_performance(best_config, output_trace=True)
+            #nghiant_230719: because the best_perf is estimated, it changes wrt the new trace; better recheck the best_perf so that the value does not matter but only the rank does
+            # after check_performance, new trace is probably applied to network_executor
+            best_perf = env.estimate_performance(best_config)
             env.dump_buffer_to_file()
 
 if __name__ == '__main__':
