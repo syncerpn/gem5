@@ -20,10 +20,10 @@ def parse_output(file, patterns):
     return result
 
 _DATA_TIMESTAMP = 0
-_DATA_NETIFS = 1
+_DATA_PKGID = 1
 _DATA_SRCROUTER = 2
 _DATA_DSTROUTER = 3
-_DATA_SETTIME = 4
+_DATA_VNET = 4
 
 _NODE_TO_NODE_DIST = 1 #cycle
 
@@ -227,13 +227,14 @@ class Executor():
             for data_line in content:
                 items = data_line.split(' ')
                 items = [item.strip(': []') for item in items if item.strip(': []')]
+                items = items[2:] #remove the first two unused info
                 
                 data = [None, None, None, None, None]
                 data[_DATA_TIMESTAMP] = int(items[0]) // 500
-                data[_DATA_NETIFS] = items[1]
-                data[_DATA_SRCROUTER] = id_dev[int(items[3].split('=')[-1])]
-                data[_DATA_DSTROUTER] = id_dev[int(items[4].split('=')[-1])]
-                data[_DATA_SETTIME] = int(items[5].split('=')[-1])
+                data[_DATA_PKGID] = int(items[1])
+                data[_DATA_SRCROUTER] = id_dev[int(items[3])]
+                data[_DATA_DSTROUTER] = id_dev[int(items[4])]
+                data[_DATA_VNET] = int(items[5])
                 self.last_trace_content.append(data)
 
         new_dev_id = dict()
