@@ -209,15 +209,15 @@ class Executor():
         trace_file = self.last_trace_file
         config = self.last_trace_config
 
-        if self.protocol == 'moesi':
-            device_name = ['L1Cache_Controller'] * self.num_cpus + ['L2Cache_Controller_0'] + ['Directory_Controller_0']
-            device_id   = list(range(self.num_cpus)) + [0] + [0]
+        # if self.protocol == 'moesi':
+        #     device_name = ['L1Cache_Controller'] * self.num_cpus + ['L2Cache_Controller'] + ['Directory_Controller']
+        #     device_id   = list(range(self.num_cpus)) + [0] + [0]
 
         if not self.last_trace_content:
-            id_dev = dict()
-            for device_name_i, device_id_i, port_i in zip(device_name, device_id, config):
-                machine_name = device_name_i + '_' + str(device_id_i)
-                id_dev[port_i] = machine_name
+            # id_dev = dict()
+            # for device_name_i, device_id_i, port_i in zip(device_name, device_id, config):
+            #     machine_name = device_name_i + '_' + str(device_id_i)
+            #     id_dev[port_i] = machine_name
 
             print('[INFO] analyze and buffer new trace')
             with open(trace_file, 'r') as f:
@@ -232,15 +232,14 @@ class Executor():
                 data = [None, None, None, None, None]
                 data[_DATA_TIMESTAMP] = int(items[0]) // 500
                 data[_DATA_PKGID] = int(items[1])
-                data[_DATA_SRCROUTER] = id_dev[int(items[3])]
-                data[_DATA_DSTROUTER] = id_dev[int(items[4])]
-                data[_DATA_VNET] = int(items[5])
+                data[_DATA_SRCROUTER] = int(items[2])
+                data[_DATA_DSTROUTER] = int(items[3])
+                data[_DATA_VNET] = int(items[4])
                 self.last_trace_content.append(data)
 
         new_dev_id = dict()
-        for device_name_i, device_id_i, port_i in zip(device_name, device_id, new_config):
-            machine_name = device_name_i + '_' + str(device_id_i)
-            new_dev_id[machine_name] = port_i
+        for i, port_i in enumerate(new_config):
+            new_dev_id[i] = port_i
 
         workload_progression_data = Progression()
         for data_raw in self.last_trace_content:
