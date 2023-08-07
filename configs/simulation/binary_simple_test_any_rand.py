@@ -302,8 +302,8 @@ for ei in range(1):
         simulation_cmd.append('--cacheline_size=64')
         # simulation_cmd.append('--maxinsts=500000000')
         # simulation_cmd.append('--warmup-insts=10000')
-        simulation_cmd.append("--num-dirs=2")
-        simulation_cmd.append("--num-l2caches=2")
+        simulation_cmd.append("--num-dirs=1")
+        simulation_cmd.append("--num-l2caches=1")
         simulation_cmd.append('| tee ' + script_file)
 
         simulation_cmd = ' '.join(simulation_cmd)
