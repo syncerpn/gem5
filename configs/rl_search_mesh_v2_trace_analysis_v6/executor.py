@@ -173,8 +173,8 @@ class Executor():
             #update input mesh config
             if self.protocol == 'moesi':
                 n_port = self.mesh_row * self.mesh_col * self.n_port_per_node
-                device_name = ['L1Cache_Controller'] * self.num_cpus + ['L2Cache_Controller'] + ['Directory_Controller']
-                device_id = list(range(self.num_cpus)) + [0] + [0]
+                device_name = ['L1Cache_Controller'] * self.num_cpus + ['L2Cache_Controller'] * self.num_l2caches + ['Directory_Controller'] * self.num_dirs
+                device_id = list(range(self.num_cpus)) + list(range(self.num_l2caches)) + list(range(self.num_dirs))
                 n_device = len(device_name)
                 assert(n_device <= n_port)
 
