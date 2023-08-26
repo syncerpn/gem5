@@ -40,15 +40,16 @@ WORKLOAD_LIST      = [
 WORKLOAD_ARGS_LIST = [
                         # 'kernel',
                         # 'input_bodytrack_simdev/sequenceB_1 4 1 100 3 0 32',
-                        '32 ../gem5/input_blackscholes_simsmall/in_4K.txt ../gem5/input_blackscholes_simsmall/test_output.txt',
+                        # '32 ../gem5/input_blackscholes_simsmall/in_4K.txt ../gem5/input_blackscholes_simsmall/test_output.txt',
                         # '32 ../gem5/input_blackscholes_test/in_4.txt ../gem5/input_blackscholes_test/test_output.txt',
                         # 'input_freqmine_simdev/T10I4D100K_1k.dat 3',
+                        '16 ../gem5/input_blackscholes_simsmall/in_4K.txt ../gem5/input_blackscholes_simsmall/test_output.txt',
                       ]
 
 PROTOCOL = 'moesi'
-NUM_CPUS = 32
+NUM_CPUS = 16 #32
 MESH_COL = 8
-MESH_ROW = 8
+MESH_ROW = 4 #8
 N_PORT_PER_NODE = 1
 N_DEVICE = NUM_CPUS
 if PROTOCOL == "moesi":
