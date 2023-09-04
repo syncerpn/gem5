@@ -31,19 +31,20 @@ if not os.path.exists(OUT_DIR):
     os.system('mkdir ' + OUT_DIR)
 
 WORKLOAD_LIST      = [
-                        '/home/nghiant/git/gem5/workload/darknet/darknet_x86',
+                        # '/home/nghiant/git/gem5/workload/darknet/darknet_x86',
                         # '/home/nghiant/git/gem5/workload/parsec-3.0/pkgs/apps/bodytrack/inst/amd64-linux.gcc-openmp/bin/bodytrack',
-                        # '/home/nghiant/git/gem5/workload/parsec-3.0/pkgs/apps/blackscholes/inst/amd64-linux.gcc-openmp/bin/blackscholes',
+                        '/home/nghiant/git/gem5/workload/parsec-3.0/pkgs/apps/blackscholes/inst/amd64-linux.gcc-openmp/bin/blackscholes',
                         # '/home/nghiant/git/gem5/workload/parsec-3.0/pkgs/apps/freqmine/inst/amd64-linux.gcc-openmp/bin/freqmine',
                       ]
 
 WORKLOAD_ARGS_LIST = [
-                        'kernel',
+                        # 'kernel',
                         # 'input_bodytrack_simdev/sequenceB_1 4 1 100 3 0 32',
                         # '32 ../gem5/input_blackscholes_simsmall/in_4K.txt ../gem5/input_blackscholes_simsmall/test_output.txt',
                         # '32 ../gem5/input_blackscholes_test/in_4.txt ../gem5/input_blackscholes_test/test_output.txt',
                         # 'input_freqmine_simdev/T10I4D100K_1k.dat 3',
                         # '16 ../gem5/input_blackscholes_simsmall/in_4K.txt ../gem5/input_blackscholes_simsmall/test_output.txt',
+                        '8 ../gem5/input_blackscholes_simsmall/in_4K.txt ../gem5/input_blackscholes_simsmall/test_output.txt',
                       ]
 
 PROTOCOL = 'moesi'
