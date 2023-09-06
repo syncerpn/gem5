@@ -161,8 +161,9 @@ class Executor():
             simulation_cmd.append('--l1i_assoc=16')
             simulation_cmd.append('--l1d_size=64kB')
             simulation_cmd.append('--l1d_assoc=16')
-            simulation_cmd.append('--l2_size=128MB')
-            simulation_cmd.append('--l2_assoc=16')
+            simulation_cmd.append('--l2_size=1MB')
+            simulation_cmd.append('--l2_size=128MB') #default
+            # simulation_cmd.append('--l2_assoc=16')
             simulation_cmd.append('--num-l2caches=' + str(self.num_l2caches))
             simulation_cmd.append('--num-dirs=' + str(self.num_dirs))
             simulation_cmd.append('--cacheline_size=64')
