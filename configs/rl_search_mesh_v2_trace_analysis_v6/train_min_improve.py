@@ -25,7 +25,7 @@ if not os.path.exists(args.save_dir):
 #EXECUTOR
 GEM5_BIN      = './build/X86_MOESI_CMP_directory/gem5.opt'
 SIM_SYS       = './configs/simulation/sim_system.py'
-OUT_DIR       = './sim_output/'
+OUT_DIR       = '/home/nghiant/git/gem5/sim_output/'
 
 if not os.path.exists(OUT_DIR):
     os.system('mkdir ' + OUT_DIR)
