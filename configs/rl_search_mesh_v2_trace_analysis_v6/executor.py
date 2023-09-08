@@ -88,7 +88,7 @@ def distance(a, b):
     return abs(xa - xb) + abs(ya - yb)
 
 class Executor():
-    def __init__(self, gem5_bin, sim_sys, num_cpus, workload_list, workload_args_list, protocol, mesh_row, mesh_col, n_port_per_node):
+    def __init__(self, gem5_bin, sim_sys, num_cpus, workload_list, workload_args_list, protocol, mesh_row, mesh_col, n_port_per_node, out_dir):
         self.trial_counter=0
         self.gem5_bin=gem5_bin
         self.sim_sys=sim_sys
@@ -113,7 +113,7 @@ class Executor():
 
         #fixed things
         self.patterns = ['simSeconds']
-        self.trial_out_dir = '/hdd/nghiant/gem5_output_temp/freqminex_x86/'
+        self.trial_out_dir = out_dir
         os.makedirs(self.trial_out_dir, exist_ok=True)
 
     def execute(self, config, output_trace=False):

@@ -80,7 +80,8 @@ exe = Executor(gem5_bin=GEM5_BIN,
     protocol=PROTOCOL,
     mesh_row=MESH_ROW,
     mesh_col=MESH_COL,
-    n_port_per_node=N_PORT_PER_NODE
+    n_port_per_node=N_PORT_PER_NODE,
+    out_dir=OUT_DIR
     )
 
 env = gem5gym.gem5_mesh_buffer_env(
