@@ -253,7 +253,7 @@ class Executor():
 
                 self.last_trace_content.append(data)
 
-            if self.mp_begin is not None and self.mp_end is not none:
+            if self.mp_begin is not None and self.mp_end is not None:
                 self.last_trace_content = self.last_trace_content[self.mp_begin:self.mp_end+1]
                 print(f"[INFO] multi-core prediction timestamp: #{self.last_trace_content[0][0]} -> #{self.last_trace_content[-1][0]}")
 
