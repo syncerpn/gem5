@@ -48,14 +48,12 @@ WORKLOAD_LIST      = [
                       ]
 
 WORKLOAD_ARGS_LIST = [
-                        # 'kernel',
-                        f'input_bodytrack_simdev/sequenceB_1 4 1 100 3 0 {NUM_CPUS}',
-                        # '32 ../gem5/input_blackscholes_simsmall/in_4K.txt ../gem5/input_blackscholes_simsmall/test_output.txt',
-                        # '32 ../gem5/input_blackscholes_test/in_4.txt ../gem5/input_blackscholes_test/test_output.txt',
+                        'kernel',
+                        # 'kernel_medium',
+                        # 'kernel_large',
+                        # f'input_bodytrack_simdev/sequenceB_1 4 1 100 3 0 {NUM_CPUS}',
                         # 'input_freqmine_simdev/T10I4D100K_1k.dat 3',
-                        # '16 ../gem5/input_blackscholes_simsmall/in_4K.txt ../gem5/input_blackscholes_simsmall/test_output.txt',
-                        # '8 ../gem5/input_blackscholes_simsmall/in_4K.txt ../gem5/input_blackscholes_simsmall/test_output.txt',
-                        # '4 ../gem5/input_blackscholes_simsmall/in_4K.txt ../gem5/input_blackscholes_simsmall/test_output.txt',
+                        # f'{NUM_CPUS} ../gem5/input_blackscholes_simsmall/in_4K.txt ../gem5/input_blackscholes_simsmall/test_output.txt',
                       ]
 
 

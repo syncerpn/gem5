@@ -111,6 +111,10 @@ class Executor():
 
         self.last_trace_content = [] #buffer this to speed up the whole process
 
+        #v7: multi-core; predict parallelizable workload part
+        self.mp_begin = None
+        self.mp_end = None
+
         #fixed things
         self.patterns = ['simSeconds']
         self.trial_out_dir = out_dir
@@ -218,22 +222,15 @@ class Executor():
         trace_file = self.last_trace_file
         config = self.last_trace_config
 
-        # if self.protocol == 'moesi':
-        #     device_name = ['L1Cache_Controller'] * self.num_cpus + ['L2Cache_Controller'] + ['Directory_Controller']
-        #     device_id   = list(range(self.num_cpus)) + [0] + [0]
-
         if not self.last_trace_content:
-            # id_dev = dict()
-            # for device_name_i, device_id_i, port_i in zip(device_name, device_id, config):
-            #     machine_name = device_name_i + '_' + str(device_id_i)
-            #     id_dev[port_i] = machine_name
+            mp_cpus = list(range(1, self.num_cpus))
 
             print('[INFO] analyze and buffer new trace')
             with open(trace_file, 'r') as f:
                 content = f.readlines()
             content = [line.strip('\n') for line in content]
 
-            for data_line in content:
+            for dli, data_line in enumerate(content):
                 items = data_line.split(' ')
                 items = [item.strip(': []') for item in items if item.strip(': []')]
                 items = items[2:] #remove the first two unused info
@@ -244,7 +241,19 @@ class Executor():
                 data[_DATA_SRCROUTER] = int(items[2])
                 data[_DATA_DSTROUTER] = int(items[3])
                 data[_DATA_VNET] = int(items[4])
+                if self.mp_begin is None:
+                    if data[_DATA_SRCROUTER] in mp_cpus or data[_DATA_DSTROUTER] in mp_cpus:
+                        self.mp_begin = dli
+                        self.mp_end = dli
+                else:
+                    if data[_DATA_SRCROUTER] in mp_cpus or data[_DATA_DSTROUTER] in mp_cpus:
+                        self.mp_end = dli
+
                 self.last_trace_content.append(data)
+
+            if self.mp_begin is not None and self.mp_end is not none:
+                self.last_trace_content = self.last_trace_content[self.mp_begin:self.mp_end+1]
+                print(f"[INFO] multi-core prediction timestamp: #{self.last_trace_content[0][0]} -> #{self.last_trace_content[-1][0]}")
 
         new_dev_id = dict()
         for i, port_i in enumerate(new_config):
