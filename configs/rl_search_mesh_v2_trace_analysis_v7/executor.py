@@ -256,6 +256,7 @@ class Executor():
             if self.mp_begin is not None and self.mp_end is not None:
                 self.last_trace_content = self.last_trace_content[self.mp_begin:self.mp_end+1]
                 print(f"[INFO] multi-core prediction timestamp: #{self.last_trace_content[0][0]} -> #{self.last_trace_content[-1][0]}")
+                print(f"[INFO] multi-core execution time: #{(self.last_trace_content[-1][0] - self.last_trace_content[0][0]) * 500 / 1_000_000}")
 
         new_dev_id = dict()
         for i, port_i in enumerate(new_config):
@@ -271,5 +272,5 @@ class Executor():
         
         all_segment = workload_progression_data.get_joined_segment()
         data_transfer_cost = sum([s[1] - s[0] for s in all_segment]) * 500 / 1_000_000
-        print('[INFO] estimate took: %.3f (s)' % (time.time() - st))
+        print(f'[INFO] estimated cost {data_transfer_cost:.6} - took: {time.time() - st:.3} (s)')
         return data_transfer_cost
