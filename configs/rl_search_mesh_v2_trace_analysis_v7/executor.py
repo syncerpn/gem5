@@ -141,6 +141,8 @@ class Executor():
                 self.last_trace_file = trace_file
                 self.last_trace_config = [i for i in config] #copy it for safety maybe
                 self.last_trace_content = []
+                self.mp_begin = None
+                self.mp_end = None
                 simulation_cmd.append('--debug-flags=nghiant_RubyNetwork')
                 simulation_cmd.append('--debug-file=' + trace_file)
 
