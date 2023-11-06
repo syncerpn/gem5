@@ -72,7 +72,7 @@ env = gem5gym.gem5_mesh_buffer_env(
     n_port=N_PORT,
     buffer_dir=BUFFER_DIR,
     executer=exe,
-    buffer_dumping_interval=BUFFER_DUMPING_INTERVAL
+    buffer_dumping_interval=1000
     )
 
 def main(config):
