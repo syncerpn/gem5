@@ -79,8 +79,10 @@ env = gem5gym.gem5_mesh_buffer_env(
 def main(config):
     # first run, need to get and analyze trace file
     perf_actual = env.check_performance(config, output_trace=True)
-    perf = env.estimate_performance(config) #return estimated perf
+    # perf = env.estimate_performance(config) #return estimated perf
 
 if __name__ == '__main__':
-    config = np.array(TO_DEFINE_CONFIG).astype(np.int32)
-    main(config)
+    # config = np.array(TO_DEFINE_CONFIG).astype(np.int32)
+    # main(config)
+    for _ in range(100):
+        config, state, perf_actual = env.random_state(output_trace=True)
