@@ -101,6 +101,7 @@ def main():
     exe.last_trace_file = SYNTHETIC_TRACE_FILE
     config, state, perf_actual = env.random_state(output_trace=True)
     perf = env.estimate_performance(config) #return estimated perf
+    print(f"[INFO] init config ({perf_actual:.3f}): {config}")
 
     best_perf = perf
     best_config = config.copy()
@@ -193,6 +194,7 @@ def main():
             print('[INFO] best estimated performance %f' % best_perf)
             print('[INFO] best estimated config ', best_config)
             perf_actual = env.estimate_performance(best_config)
+            print(f"[INFO] best config ({perf_actual:.3f}): {best_config}")
             #nghiant_230719: because the best_perf is estimated, it changes wrt the new trace; better recheck the best_perf so that the value does not matter but only the rank does
             # after check_performance, new trace is probably applied to network_executor
             best_perf = env.estimate_performance(best_config)
