@@ -111,7 +111,7 @@ def main():
     running_reward = 0
 
     # run inifinitely many episodes
-    for i_episode in count(1):
+    for i_episode in range(10000):
         print('[INFO] episode', i_episode)
 
         EXPLORATION_FACTOR = 1
@@ -198,7 +198,8 @@ def main():
             #nghiant_230719: because the best_perf is estimated, it changes wrt the new trace; better recheck the best_perf so that the value does not matter but only the rank does
             # after check_performance, new trace is probably applied to network_executor
             best_perf = env.estimate_performance(best_config)
-            env.dump_buffer_to_file()
+            # env.dump_buffer_to_file()
 
 if __name__ == '__main__':
-    main()
+    for _ in range(100):
+        main()
