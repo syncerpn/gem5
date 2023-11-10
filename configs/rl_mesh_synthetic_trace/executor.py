@@ -111,10 +111,6 @@ class Executor():
 
         self.last_trace_content = [] #buffer this to speed up the whole process
 
-        #v7: multi-core; predict parallelizable workload part
-        self.mp_begin = None
-        self.mp_end = None
-
         #fixed things
         self.patterns = ['simSeconds']
         self.trial_out_dir = out_dir
@@ -141,8 +137,6 @@ class Executor():
                 self.last_trace_file = trace_file
                 self.last_trace_config = [i for i in config] #copy it for safety maybe
                 self.last_trace_content = []
-                self.mp_begin = None
-                self.mp_end = None
                 simulation_cmd.append('--debug-flags=nghiant_RubyNetwork')
                 simulation_cmd.append('--debug-file=' + trace_file)
 
@@ -243,20 +237,8 @@ class Executor():
                 data[_DATA_SRCROUTER] = int(items[2])
                 data[_DATA_DSTROUTER] = int(items[3])
                 data[_DATA_VNET] = int(items[4])
-                if self.mp_begin is None:
-                    if data[_DATA_SRCROUTER] in mp_cpus or data[_DATA_DSTROUTER] in mp_cpus:
-                        self.mp_begin = dli
-                        self.mp_end = dli
-                else:
-                    if data[_DATA_SRCROUTER] in mp_cpus or data[_DATA_DSTROUTER] in mp_cpus:
-                        self.mp_end = dli
 
                 self.last_trace_content.append(data)
-
-            if self.mp_begin is not None and self.mp_end is not None:
-                self.last_trace_content = self.last_trace_content[self.mp_begin:self.mp_end+1]
-                print(f"[INFO] multi-core prediction timestamp: #{self.last_trace_content[0][0]} -> #{self.last_trace_content[-1][0]}")
-                print(f"[INFO] multi-core execution time: #{(self.last_trace_content[-1][0] - self.last_trace_content[0][0]) * 500 / 1_000_000:.6f}")
 
         new_dev_id = dict()
         for i, port_i in enumerate(new_config):
