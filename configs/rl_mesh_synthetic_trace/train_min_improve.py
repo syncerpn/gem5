@@ -31,8 +31,8 @@ if not os.path.exists(OUT_DIR):
     os.system('mkdir ' + OUT_DIR)
 
 PROTOCOL = 'moesi'
-NUM_CPUS = 16 #32
-MESH_COL = 8
+NUM_CPUS = 8 #32
+MESH_COL = 4
 MESH_ROW = 4 #8
 N_PORT_PER_NODE = 1
 N_DEVICE = NUM_CPUS
