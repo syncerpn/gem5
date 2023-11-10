@@ -96,10 +96,13 @@ env = gem5gym.gem5_mesh_buffer_env(
 policy_model = model.config_policy_model(POLICY_CONFIG, STATE_DIM, N_DEVICE, N_PORT)
 optimizer = optim.Adam(policy_model.parameters(), lr=1e-2, weight_decay=0.0001)
 
+PRESET_CONFIG = [0,4,8,12,3,7,11,15,5,9,6,10,1,13,2,14]
+PRESET_CONFIG = [9,8,1,6,4,2,3,12,10,5,14,0,7,11,15,13]
+
 def main():
     # first run, need to get and analyze trace file
     exe.last_trace_file = SYNTHETIC_TRACE_FILE
-    config = np.array([0,4,8,12,3,7,11,15,5,9,6,10,1,13,2,14]).astype(np.int32)
+    config = np.array(PRESET_CONFIG).astype(np.int32)
     perf = env.estimate_performance(config) #return estimated perf
     print(f"[INFO] init config ({perf:.3f}): {config}")
 
